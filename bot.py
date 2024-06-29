@@ -1,10 +1,9 @@
 import telebot
 import requests
+import socket
 
-# thay token Telegram
 bot = telebot.TeleBot('7319849696:AAHtI6CGloOVzNZS3S2-P6HX0G3SZRpPh6U')
 
-# gọi API và lấy thông tin từ file json
 def get_random_vnc_info():
     response = requests.get('https://computernewb.com/vncresolver/api/scans/vnc/random')
     if response.status_code == 200:
@@ -12,12 +11,24 @@ def get_random_vnc_info():
     else:
         return None
 
+def is_port_open(ip, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    result = sock.connect_ex((ip, port))
+    sock.close()
+    return result == 0
+
 @bot.message_handler(commands=['vnc'])
-def handle_start(message):
-    vnc_info = get_random_vnc_info()
+def handle_vnc(message):
+    vnc_info = None
+    while True:
+        vnc_info = get_random_vnc_info()
+        if vnc_info and is_port_open(vnc_info['ip'], vnc_info['port']):
+            break
+
     if vnc_info:
         reply = (
-            f"\n\n Nếu không thể kết nối, vui lòng nhập /vnc để lấy IP mới🥰🥰\n"
+            f"\n\nNếu không thể kết nối, vui lòng nhập /vnc để lấy IP mới🥰🥰\n"
             f"\nTelegram: @oatdonemdume\n"
             f"\n"
             f"\nIP: {vnc_info['ip']}:{vnc_info['port']}\n"
@@ -38,5 +49,4 @@ def handle_start(message):
 
     bot.send_message(message.chat.id, reply)
 
-# chạy bot
 bot.polling()
