@@ -18,6 +18,14 @@ def is_port_open(ip, port):
     sock.close()
     return result == 0
 
+def send_message_with_retry(chat_id, text):
+    while True:
+        try:
+            bot.send_message(chat_id, text)
+            break
+        except Exception as e:
+            print(f"Error sending message: {e}. Retrying...")
+
 @bot.message_handler(commands=['vnc'])
 def handle_vnc(message):
     vnc_info = None
@@ -47,6 +55,6 @@ def handle_vnc(message):
     else:
         reply = "\nKhông thể lấy thông tin VNC từ API, có lẽ API đã hết hạn hoặc có một vụ tấn công nào đó đã xảy ra."
 
-    bot.send_message(message.chat.id, reply)
+    send_message_with_retry(message.chat.id, reply)
 
 bot.polling()
