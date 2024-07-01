@@ -50,7 +50,6 @@ def handle_vnc(message):
             f"Các Port đang mở: {vnc_info['openports']}\n"
             f"Tên người dùng: {vnc_info['username']}\n"
             f"Mật khẩu: {vnc_info['password']}\n"
-            f"Đã tạo vào: {vnc_info['createdat']}\n"
         )
     else:
         reply = "\nKhông thể lấy thông tin VNC từ API, có lẽ API đã hết hạn hoặc có một vụ tấn công nào đó đã xảy ra."
