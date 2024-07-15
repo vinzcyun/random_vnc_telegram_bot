@@ -2,7 +2,7 @@ import telebot
 import requests
 import socket
 
-bot = telebot.TeleBot('7319849696:AAHtI6CGloOVzNZS3S2-P6HX0G3SZRpPh6U')
+bot = telebot.TeleBot('7163508623:AAE0a1Ho3fp7R7InbjW-P_mA02p9ghYUfXE')
 
 def get_random_vnc_info():
     response = requests.get('https://computernewb.com/vncresolver/api/scans/vnc/random')
